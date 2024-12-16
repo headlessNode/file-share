@@ -10,8 +10,6 @@ loginRouter.get('/', (req, res) => {
     }
 });
 
-loginRouter.post('/', (req, res) => {
-    loginController.login(req, res);
-});
+loginRouter.post('/', loginController.loginUser);
 
 module.exports = loginRouter;

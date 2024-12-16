@@ -10,8 +10,6 @@ signupRouter.get('/', (req, res) => {
     }
 });
 
-signupRouter.post('/', (req, res) => {
-    signupController.signup(req, res);
-});
+signupRouter.post('/', signupController.signup);
 
 module.exports = signupRouter;

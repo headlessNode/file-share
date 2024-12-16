@@ -6,12 +6,24 @@
         <title>File Share - Signup</title>
     </head>
     <body>
+        <% if(locals.errors){ %>
+            <div><%- include('./partials/validationErrors') %></div>
+        <% } %>
         <form action="/signup" method="post">
+            <label for="firstname">First name:</label>
+            <input type="text" id="firstname" name="firstname">
+            <br>
+            <label for="lastname">Last name:</label>
+            <input type="text" id="lastname" name="lastname">
+            <br>
             <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+            <input type="text" id="username" name="username">
             <br>
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="password" name="password">
+            <br>
+            <label for="confirmPassword">Confirm password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword">
             <br>
             <button type="submit">Sign up</button>
         </form>

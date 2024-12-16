@@ -1,6 +1,6 @@
 const {body, validationResult} = require('express-validator');
 const {PrismaClient} = require('@prisma/client');
-const asyncHandler = require('async-handler');
+const asyncHandler = require('express-async-handler');
 const passport = require('passport');
 
 
