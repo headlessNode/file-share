@@ -9,8 +9,6 @@ indexRouter.get('/', (req, res) => {
     indexController.renderIndex(req, res);
 });
 
-indexRouter.post('/', (req, res) => {
-    console.log(req.body);
-});
+indexRouter.post('/', indexController.createFolder);
 
 module.exports = indexRouter;

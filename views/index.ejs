@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>File Share</title>
         <link rel="stylesheet" href="/output.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
     <body class="bg-gray-100 flex flex-col items-center justify-center">
         <div class="wrapper max-w-7xl w-full h-screen flex flex-col items-center">
@@ -40,7 +41,7 @@
                 class="new-folder-modal top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-0 rounded-md shadow-xl backdrop:bg-gray-500 backdrop:opacity-50"
             >
                 <div class="p-6 rounded-md">
-                    <form action="/folders" method="POST" class="space-y-4">
+                    <form action="/" method="POST" class="space-y-4">
                         <div class="flex flex-col gap-3">
                             <label 
                                 for="folder" 
@@ -74,14 +75,62 @@
             </dialog>
 
             <!-- Folders and Files Sections -->
-            <div class="grid grid-cols-2 gap-6">
-                <div class="folders bg-white p-4 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Folders</h2>
-                    <!-- Folder content will be dynamically populated -->
+            <div class="w-full flex flex-col gap-6">
+                <div class="w-full folders bg-white p-4 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Your Folders</h2>
+                    <div class="flex flex-col w-full">
+                        <div class="flex justify-start bg-gray-100 text-gray-600 uppercase text-sm px-4 py-2">
+                            <div class="w-1/3 text-left">Name</div>
+                            <div class="w-1/3 text-left">Created At</div>
+                        </div>
+                        <div class="flex flex-col text-gray-600 text-sm">
+                            <% if (locals.folders.length > 0) { %>
+                                <% locals.folders.forEach((folder, i) => { %>
+                                    <div class="flex justify-start border-b hover:bg-gray-50 px-4 py-2">
+                                        <div class="w-1/3 truncate"><%= folder.name %></div>
+                                        <div class="w-1/3">
+                                            <%= new Intl.DateTimeFormat('en-US', { 
+                                                weekday: 'short', 
+                                                day: '2-digit', 
+                                                month: '2-digit', 
+                                                year: 'numeric' 
+                                            }).format(new Date(folder.created_at)) %>
+                                        </div>
+                                    </div>
+                                <% }) %>
+                            <% } else { %>
+                                <div class="py-4 text-center text-gray-500">No folders found</div>
+                            <% } %>
+                        </div>
+                    </div>
                 </div>
-                <div class="files bg-white p-4 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Files</h2>
-                    <!-- Files content will be dynamically populated -->
+                <div class="w-full files bg-white p-4 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Your Files</h2>
+                    <div class="flex flex-col w-full">
+                        <div class="flex justify-start bg-gray-100 text-gray-600 uppercase text-sm px-4 py-2">
+                            <div class="w-1/3 text-left">Name</div>
+                            <div class="w-1/3 text-left">Uploaded At</div>
+                        </div>
+                        <div class="flex flex-col text-gray-600 text-sm">
+                            <% if (locals.files.length > 0) { %>
+                                <% locals.files.forEach((file) => { %>
+                                    <div class="flex justify-start border-b hover:bg-gray-50 px-4 py-2">
+                                        <div class="w-1/3 truncate"><%= file.name %></div>
+                                        <div class="w-1/3">
+                                            <%= new Intl.DateTimeFormat('en-US', { 
+                                                weekday: 'short', 
+                                                day: '2-digit', 
+                                                month: '2-digit', 
+                                                year: 'numeric' 
+                                            }).format(new Date(file.uploaded_at)) %>
+                                        </div>
+                                    </div>
+                                <% }) %>
+                            <% } else { %>
+                                <div class="py-4 text-center text-gray-500">No files found</div>
+                            <% } %>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
