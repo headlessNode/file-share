@@ -5,7 +5,7 @@ const signupController = require('../controllers/signupController.js');
 signupRouter.get('/', (req, res) => {
     if(!req.isAuthenticated()) {
         signupController.renderSignup(req, res);
-    }else {
+    } else {
         res.redirect('/');
     }
 });

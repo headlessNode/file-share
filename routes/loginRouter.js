@@ -5,7 +5,7 @@ const loginController = require('../controllers/loginController.js');
 loginRouter.get('/', (req, res) => {
     if(!req.isAuthenticated()) {
         loginController.renderLogin(req, res);
-    }else {
+    } else {
         res.redirect('/');
     }
 });
