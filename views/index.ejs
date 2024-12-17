@@ -4,8 +4,120 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>File Share</title>
+        <link rel="stylesheet" href="/output.css">
     </head>
-    <body>
-        <h1>Hello World!</h1>
+    <body class="bg-gray-100 flex flex-col items-center justify-center">
+        <div class="wrapper max-w-7xl w-full h-screen flex flex-col items-center">
+            <div class="w-full flex justify-between items-center mb-6 mt-6">
+                <h1 class="text-3xl font-bold text-gray-800">Hello <%= locals.user.first_name %> <%= locals.user.last_name %></h1>
+                <a 
+                    href="/logout" 
+                    class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-300"
+                >
+                    Logout
+                </a>
+            </div>
+
+            <div class="w-full mb-6 flex flex-col gap-4 md:flex-row">
+                <button 
+                    class="new-folder bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"
+                >
+                    New folder
+                </button>
+                <button 
+                    class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-300"
+                >
+                    New file upload
+                </button>
+                <button 
+                    class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-purple-600 transition duration-300"
+                >
+                    New folder upload
+                </button>
+            </div>
+
+            <dialog 
+                class="new-folder-modal top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-0 rounded-md shadow-xl backdrop:bg-gray-500 backdrop:opacity-50"
+            >
+                <div class="p-6 rounded-md">
+                    <form action="/folders" method="POST" class="space-y-4">
+                        <div class="flex flex-col gap-3">
+                            <label 
+                                for="folder" 
+                                class="text-xl font-semibold text-gray-700"
+                            >
+                                New Folder
+                            </label>
+                            <input 
+                                type="text" 
+                                name="folder" 
+                                id="folder" 
+                                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                        </div>
+                        <div class="flex space-x-4">
+                            <button 
+                                type="submit" 
+                                class="create flex-1 bg-blue-500 text-white py-2 rounded-md disabled:bg-slate-300 hover:bg-blue-600 transition duration-300"
+                            >
+                                Create
+                            </button>
+                            <button 
+                                type="button" 
+                                class="cancel flex-1 bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </dialog>
+
+            <!-- Folders and Files Sections -->
+            <div class="grid grid-cols-2 gap-6">
+                <div class="folders bg-white p-4 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Folders</h2>
+                    <!-- Folder content will be dynamically populated -->
+                </div>
+                <div class="files bg-white p-4 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Files</h2>
+                    <!-- Files content will be dynamically populated -->
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const newFolderBtn = document.querySelector('.new-folder');
+                const newFolderModal = document.querySelector('.new-folder-modal');
+                const newFolderFormInputs = document.querySelectorAll('.new-folder-modal input');
+                const cancelFolderBtn = document.querySelector('.new-folder-modal .cancel');
+
+
+                newFolderBtn.addEventListener('click', () => {
+                    const createFolderBtn = document.querySelector('.new-folder-modal .create');
+                    createFolderBtn.setAttribute('disabled', '');
+                    newFolderModal.showModal();
+                });
+
+                newFolderFormInputs.forEach(input => {
+                    input.addEventListener('input', () => {
+                        const createFolderBtn = document.querySelector('.new-folder-modal .create');
+                        const disable = input.value.trim() === '';
+                        if (disable) {
+                            createFolderBtn.setAttribute('disabled', '');
+                        } else {
+                            createFolderBtn.removeAttribute('disabled');
+                        }
+                    });
+                });
+
+                cancelFolderBtn.addEventListener('click', () => {
+                    const form = newFolderModal.querySelector('form');
+                    form.reset();
+                    newFolderModal.close();
+                });
+            });
+        </script>
     </body>
 </html>

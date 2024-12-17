@@ -4,32 +4,101 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>File Share - Signup</title>
+        <link rel="stylesheet" href="/output.css">
     </head>
-    <body>
-        <% if(locals.errors){ %>
-            <div><%- include('./partials/validationErrors') %></div>
-        <% } %>
-        <form action="/signup" method="post">
-            <label for="firstname">First name:</label>
-            <input type="text" id="firstname" name="firstname">
-            <br>
-            <label for="lastname">Last name:</label>
-            <input type="text" id="lastname" name="lastname">
-            <br>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username">
-            <br>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password">
-            <br>
-            <label for="confirmPassword">Confirm password:</label>
-            <input type="password" id="confirmPassword" name="confirmPassword">
-            <br>
-            <button type="submit">Sign up</button>
-        </form>
-        <div>
-            <span>Already have an account?</span>
-            <a href="/login">Login</a>
+    <body class="bg-gray-100 flex flex-col items-center justify-center">
+        <div class="wrapper max-w-7xl w-full h-screen flex flex-col items-center justify-center">
+            <div class="bg-white p-8 rounded-lg shadow-md w-96">
+                <h2 class="text-2xl font-bold mb-6 text-center">Sign Up</h2>
+                <div class="text-red-500 mb-4">
+                    <% if(locals.errors){ %>
+                        <%- include('./partials/validationErrors') %>
+                    <% } %>
+                </div>
+                <form action="/signup" method="post" class="space-y-4">
+                    <div>
+                        <label for="firstname" class="block text-sm font-medium text-gray-700 mb-2">First name:</label>
+                        <input
+                            type="text"
+                            id="firstname"
+                            name="firstname"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                    </div>
+                    <div>
+                        <label for="lastname" class="block text-sm font-medium text-gray-700 mb-2">Last name:</label>
+                        <input
+                            type="text"
+                            id="lastname"
+                            name="lastname"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                    </div>
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Username:</label>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password:</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                    </div>
+                    <div>
+                        <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">Confirm password:</label>
+                        <input
+                            type="password"
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                    </div>
+                    <button
+                        type="submit"
+                        class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 disabled:bg-slate-300 transition duration-300"
+                        disabled
+                    >
+                        Sign up
+                    </button>
+                </form>
+                <div class="text-center mt-4 text-sm">
+                    <span class="text-gray-600">Already have an account?</span>
+                    <a href="/login" class="text-blue-500 hover:underline ml-1">
+                        Login
+                    </a>
+                </div>
+            </div>
         </div>
     </body>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const signupForm = document.querySelector('form');
+            const signupFormInpus = signupForm.querySelectorAll('input');
+            const signupFormSubmitBtn = signupForm.querySelector('button');
+
+            signupFormInpus.forEach(input => {
+                input.addEventListener('input', () => {
+                    const firstName = signupForm.querySelector('#firstname').value.trim();
+                    const lastName = signupForm.querySelector('#lastname').value.trim();
+                    const username = signupForm.querySelector('#username').value.trim();
+                    const password = signupForm.querySelector('#password').value.trim();
+                    const confirmPassword = signupForm.querySelector('#confirmPassword').value;
+                    const disable =  firstName === '' || lastName === '' || username === '' || password === '' || confirmPassword === '';
+                    if (disable) {
+                        signupFormSubmitBtn.setAttribute('disabled', '');
+                    } else {
+                        signupFormSubmitBtn.removeAttribute('disabled');
+                    }
+                });
+            });
+        });
+    </script>
 </html>

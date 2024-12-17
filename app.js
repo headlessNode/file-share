@@ -8,10 +8,12 @@ const LocalStrategy = require('passport-local').Strategy;
 const {PrismaClient} = require('@prisma/client');
 const prisma = new PrismaClient();
 const bcryptJs = require('bcryptjs');
+const multer = require('multer');
 const asyncHandler = require('express-async-handler');
 const indexRouter = require('./routes/indexRouter.js');
 const loginRouter = require('./routes/loginRouter.js');
 const signupRouter = require('./routes/signupRouter.js');
+const foldersRouter = require( './routes/foldersRouter.js' );
 require('dotenv').config();
 
 
@@ -63,7 +65,7 @@ passport.deserializeUser(asyncHandler(async (id, done) => {
 passport.use(
     new LocalStrategy(
         asyncHandler(async (username, password, done) => {
-            const user = await prisma.user.findUniqueOrThrow({
+            const user = await prisma.user.findUnique({
                 where: {
                     user_name: username
                 }
@@ -95,7 +97,17 @@ app.use((req, res, next) => {
 app.use( '/', indexRouter );
 app.use( '/login', loginRouter );
 app.use( '/signup', signupRouter );
-
+app.use( '/folders', foldersRouter );
+app.use('/logout', (req, res) => {
+    req.logOut((err) => {
+        if (err) {
+            return next(err);
+        }
+        req.session.destroy();
+        res.clearCookie('connect.sid');
+        res.redirect('/');
+    });
+})
 
 // SERVER STARTUP //
 

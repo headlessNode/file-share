@@ -5,19 +5,16 @@ const prisma = new PrismaClient();
 const asyncHandler = require('express-async-handler');
 
 const validateFirstname = [
-    body('firstname').notEmpty().withMessage('First name is required'),
     body('firstname').isLength({min: 3}).withMessage('First name must be at least 3 characters long'),
     body('firstname').isAlpha().withMessage('First name must only contain letters'),
 ];
 
 const validateLastname = [
-    body('lastname').notEmpty().withMessage('Last name is required'),
     body('lastname').isLength({min: 3}).withMessage('Last name must be at least 3 characters long'),
     body('lastname').isAlpha().withMessage('Last name must only contain letters'),
 ];
 
 const validateUsername = [
-    body('username').notEmpty().withMessage('Username is required'),
     body('username').isLength({min: 3}).withMessage('Username must be at least 3 characters long'),
     body('username').isAlphanumeric().withMessage('Username must only contain letters and numbers'),
     body('username').custom(async (value) => {
@@ -31,7 +28,6 @@ const validateUsername = [
 ];
 
 const validatePassword = [
-    body('password').notEmpty().withMessage('Password is required'),
     body('password').isLength({min: 8}).withMessage('Password must be at least 8 characters long'),
 ];
 

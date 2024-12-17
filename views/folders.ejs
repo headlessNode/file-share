@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>File Share - Folders</title>
+    </head>
+    <body>
+        <div class="folder-grid">
+            <% locals.folders.forEach(function(folder) { %>
+              <div class="folder-item" data-id="<%= folder.id %>">
+                <div class="folder-name"><%= folder.name %></div>
+              </div>
+            <% }); %>
+          </div>
+    </body>
+</html>
