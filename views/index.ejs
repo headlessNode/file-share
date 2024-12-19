@@ -86,15 +86,25 @@
                         <div class="flex flex-col text-gray-600 text-sm">
                             <% if (locals.folders.length > 0) { %>
                                 <% locals.folders.forEach((folder, i) => { %>
-                                    <div class="flex justify-start border-b hover:bg-gray-50 px-4 py-2">
-                                        <div class="w-1/3 truncate"><%= folder.name %></div>
-                                        <div class="w-1/3">
+                                    <div class="folder flex justify-start items-center border-b hover:bg-gray-50 px-4 py-2">
+                                        <div class="w-full truncate"><%= folder.name %></div>
+                                        <div class="w-full">
                                             <%= new Intl.DateTimeFormat('en-US', { 
                                                 weekday: 'short', 
                                                 day: '2-digit', 
                                                 month: '2-digit', 
                                                 year: 'numeric' 
                                             }).format(new Date(folder.created_at)) %>
+                                        </div>
+                                        <div class="relative w-full">
+                                            <button class="menu-btn p-3 rounded-full" data-menu="menu-<%= i %>">
+                                                <i class="fa-solid fa-ellipsis-vertical fa-sm"></i>
+                                            </button>
+                                            <div class="hidden menu menu-<%= i %> w-28 absolute z-10 bg-white rounded-md shadow-md" data-menu-hidden="true">
+                                                <a href="#" class="p-2 border-b hover:bg-gray-200">Open</a>
+                                                <a href="#" class="p-2 border-b hover:bg-gray-200">Rename</a>
+                                                <a href="/folders/<%= folder.id %>/delete" class="p-2 border-b hover:bg-gray-200">Delete</a>
+                                            </div>
                                         </div>
                                     </div>
                                 <% }) %>
@@ -141,14 +151,16 @@
                 const newFolderModal = document.querySelector('.new-folder-modal');
                 const newFolderFormInputs = document.querySelectorAll('.new-folder-modal input');
                 const cancelFolderBtn = document.querySelector('.new-folder-modal .cancel');
+                const folderMenuBtns = document.querySelectorAll('.folder .menu-btn');
 
-
+                // Open New Folder Modal
                 newFolderBtn.addEventListener('click', () => {
                     const createFolderBtn = document.querySelector('.new-folder-modal .create');
                     createFolderBtn.setAttribute('disabled', '');
                     newFolderModal.showModal();
                 });
-
+        
+                // Enable/Disable Create Button based on input
                 newFolderFormInputs.forEach(input => {
                     input.addEventListener('input', () => {
                         const createFolderBtn = document.querySelector('.new-folder-modal .create');
@@ -160,11 +172,52 @@
                         }
                     });
                 });
-
+        
+                // Cancel New Folder Modal
                 cancelFolderBtn.addEventListener('click', () => {
                     const form = newFolderModal.querySelector('form');
                     form.reset();
                     newFolderModal.close();
+                });
+        
+                // Toggle Folder Menu
+                folderMenuBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation(); // Prevent this click from triggering the document click event
+                        const menu = btn.getAttribute('data-menu');
+                        const menuElem = document.querySelector(`.${menu}`);
+                        const isHidden = menuElem.classList.contains('hidden');
+                        const allOpenMenus = document.querySelectorAll('.menu:not(.hidden)');
+
+                        // Close all open menus before opening the clicked one
+                        allOpenMenus.forEach(menu => {
+                            menu.classList.add('hidden');
+                            menuElem.classList.remove('flex');
+                            menuElem.classList.remove('flex-col');
+                        });
+
+                        // Open the clicked menu
+                        if (isHidden) {
+                            menuElem.classList.remove('hidden');
+                            menuElem.classList.add('flex');
+                            menuElem.classList.add('flex-col');
+                            menuElem.setAttribute('data-menu-hidden', 'false');
+                        }
+                    });
+                });
+
+                // Close menu if clicked outside
+                document.addEventListener('click', (e) => {
+                    const openMenus = document.querySelectorAll('.menu:not(.hidden)');
+                    openMenus.forEach(menu => {
+                        // Check if the click happened outside the menu and its button
+                        if (!menu.contains(e.target) && !menu.previousElementSibling.contains(e.target)) {
+                            menu.classList.add('hidden');
+                            menuElem.classList.remove('flex');
+                            menuElem.classList.remove('flex-col');
+                            menu.setAttribute('data-menu-hidden', 'true');
+                        }
+                    });
                 });
             });
         </script>
